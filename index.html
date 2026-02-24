@@ -11,7 +11,7 @@
     <div data-component="nav"></div>
 <!-- SECTION  HERO    -->
     <main id="hero" class="z-10 relative bg-cover bg-center bg-no-repeat text-white py-60 "
-                    style="background-image: url('./assets/white-BSA-logo.png') ;">
+                    style="background-image: url('/assets/white-BSA-logo.png') ;">
         <div class="absolute inset-0 bg-gradient-to-b from-black/70 from-30% to-transparent"></div>
         <div class="relative  max-w-4xl mx-auto text-center px-4">
             <h2 class="text-4xl font-bold mb-4">Welcome to Troop 309 Brooklyn</h2>
@@ -48,7 +48,8 @@
     <!-- Floating Action Buttons -->
     <div data-component="float" ></div>
     
-
-    <script src="scripts/loadComponents.js" defer></script>
+    <script>fetch("/scripts/blog.js")</script>
+    <script>fetch("/scripts/loadComponents.js")</script>
+    <script src="/scripts/loadComponents.js" defer></script>
 </body>
 </html>
