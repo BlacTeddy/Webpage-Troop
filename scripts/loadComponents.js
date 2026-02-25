@@ -30,17 +30,18 @@ async function loadComponent(selector, url, callback) {
 }
 
 // Auto-loader
-document.querySelectorAll("[data-component]").forEach(el => {
-  const name = el.dataset.component;
+// document.querySelectorAll("[data-component]").forEach(el => {
+//   const name = el.dataset.component;
 
-  if (name === "head") {
-    loadHeadComponent(`/components/head.html`, setupPageHead);
-    el.remove();
-  } 
-});
+//   if (name === "head") {
+//     loadHeadComponent(`/components/head.html`, setupPageHead);
+//     el.remove();
+//   } 
+// });
 
 
 
+loadHeadComponent(`/components/head.html`, setupPageHead);
 loadComponent('[data-component="nav"]', './components/nav.html', initNav);
 loadComponent('[data-component="footer"]', './components/footer.html', initFooter);
 loadComponent('[data-component="float"]', './components/float.html');
@@ -171,4 +172,5 @@ function initFooter() {
     yearEl.textContent = new Date().getFullYear();
   }
 }
+
 
