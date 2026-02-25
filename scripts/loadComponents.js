@@ -41,9 +41,9 @@ document.querySelectorAll("[data-component]").forEach(el => {
 
 
 
-loadComponent('[data-component="nav"]', '/components/nav.html', initNav);
-loadComponent('[data-component="footer"]', '/components/footer.html', initFooter);
-loadComponent('[data-component="float"]', '/components/float.html');
+loadComponent('[data-component="nav"]', './components/nav.html', initNav);
+loadComponent('[data-component="footer"]', './components/footer.html', initFooter);
+loadComponent('[data-component="float"]', './components/float.html');
 //for ids\\
 // loadComponent("nav", "components/nav.html", initNav);
 // loadComponent("footer", "components/footer.html", initFooter);
@@ -171,3 +171,4 @@ function initFooter() {
     yearEl.textContent = new Date().getFullYear();
   }
 }
+
