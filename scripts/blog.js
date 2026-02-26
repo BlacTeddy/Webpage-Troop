@@ -10,7 +10,7 @@ function loadJSON(url, callback) {
 
 // Initialize the blog index page
 function initBlog() {
-  loadJSON("posts.json", posts => {
+  loadJSON("data/posts.json", posts => {
     // Sort newest first
     posts.sort((a, b) => new Date(b.date) - new Date(a.date));
 

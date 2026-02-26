@@ -2,53 +2,46 @@
 function capitalize(str) { 
   return str.charAt(0).toUpperCase() + str.slice(1); 
 }
+// Detect repo name ONLY when running on GitHub Pages
+let repo = ""; 
+const pathParts = window.location.pathname.split("/").filter(Boolean);
 
-/**
- * Robust Base Path Detection
- * This ensures that whether you are on:
- * 1. localhost:5500/index.html -> basePath = ""
- * 2. username.github.io/my-repo/index.html -> basePath = "/my-repo"
- */
-const isGitHubPages = window.location.hostname.includes("github.io");
-const pathSegments = window.location.pathname.split("/").filter(Boolean);
+// Detect repo name ONLY on GitHub Pages
+if (location.hostname.endsWith("github.io") && pathParts.length > 1) {
+   repo = pathParts[0]; }
 
-// On GitHub Pages, the first segment is usually the repo name
-const repoName = (isGitHubPages && pathSegments.length > 0) ? pathSegments[0] : "";
-const basePath = repoName ? `/${repoName}` : "";
+const basePath = repo ? `/${repo}` : "";
 
-// 1. Load <head> component
-// Using a relative path starting with / ensures it works from subfolders like /blog/
-fetch(`${basePath}/components/head.html`)
-  .then(response => {
-    if (!response.ok) throw new Error(`HTTP error! status: ${response.status}`);
-    return response.text();
-  })
+// Build correct path to head.html
+const headPath = `${basePath}/components/head.html`;
+
+// Load <head> component
+fetch(headPath)
+  .then(response => response.text())
   .then(html => {
     document.head.insertAdjacentHTML("beforeend", html);
   })
-  .catch(err => console.error("Failed to load head.html:", err));
+  .catch(err => console.error("Failed to load head.html", err));
 
-// 2. Load all other components
+// Load all other components
 document.querySelectorAll("[data-component]").forEach(el => {
   const name = el.getAttribute("data-component");
   const file = `${basePath}/components/${name}.html`;
 
   fetch(file)
-    .then(r => {
-      if (!r.ok) throw new Error(`Could not find ${name}.html at ${file}`);
-      return r.text();
-    })
+    .then(r => r.text())
     .then(html => {
       el.innerHTML = html;
-      
-      // Call init function if it exists (e.g., initNav())
-      const initFnName = `init${capitalize(name)}`;
-      if (typeof window[initFnName] === "function") { 
-        window[initFnName](); 
+      // Call init function if it exists
+      const initFn = window[`init${capitalize(name)}`];
+      if (typeof initFn === "function") { 
+        initFn(); 
       }
     })
-    .catch(err => console.error(`Failed to load component:`, err));
+    .catch(err => console.error(`Failed to load ${name}.html`, err));
 });
+
+
 
 function initNav() {
   console.log("Nav initialized");
@@ -111,4 +104,3 @@ function initFooter() {
 function initFloat() {
   console.log("Float initialized");
 }
-
