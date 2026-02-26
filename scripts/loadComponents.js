@@ -1,46 +1,27 @@
-// Helper: Capitalize component names 
-function capitalize(str) { 
-  return str.charAt(0).toUpperCase() + str.slice(1); 
-}
-// Detect repo name ONLY when running on GitHub Pages
-let repo = ""; 
-const pathParts = window.location.pathname.split("/").filter(Boolean);
-
-// Detect repo name ONLY on GitHub Pages
-if (location.hostname.endsWith("github.io") && pathParts.length > 1) {
-   repo = pathParts[0]; }
-
-const basePath = repo ? `/${repo}` : "";
-
-// Build correct path to head.html
-const headPath = `${basePath}/components/head.html`;
-
-// Load <head> component
-fetch(headPath)
+// Load <head> component - notice NO basePath needed!
+fetch("components/head.html")
   .then(response => response.text())
   .then(html => {
     document.head.insertAdjacentHTML("beforeend", html);
-  })
-  .catch(err => console.error("Failed to load head.html", err));
+  });
 
 // Load all other components
 document.querySelectorAll("[data-component]").forEach(el => {
   const name = el.getAttribute("data-component");
-  const file = `${basePath}/components/${name}.html`;
-
-  fetch(file)
+  
+  // The browser automatically adds the <base href> to this string
+  fetch(`components/${name}.html`)
     .then(r => r.text())
     .then(html => {
       el.innerHTML = html;
-      // Call init function if it exists
-      const initFn = window[`init${capitalize(name)}`];
-      if (typeof initFn === "function") { 
-        initFn(); 
-      }
+      
+      // Optional: Capitalize and Init
+      const capName = name.charAt(0).toUpperCase() + name.slice(1);
+      const initFn = window[`init${capName}`];
+      if (typeof initFn === "function") initFn();
     })
     .catch(err => console.error(`Failed to load ${name}.html`, err));
 });
-
 
 
 function initNav() {
@@ -104,3 +85,4 @@ function initFooter() {
 function initFloat() {
   console.log("Float initialized");
 }
+
