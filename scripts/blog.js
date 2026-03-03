@@ -8,6 +8,8 @@ function loadJSON(url, callback) {
     .catch(err => console.error("JSON load error:", err));
 }
 
+
+
 // Initialize the blog index page
 function initBlog() {
   loadJSON("data/posts.json", posts => {
@@ -43,6 +45,8 @@ function initBlog() {
       container.appendChild(card);
     });
   });
+
+
 }
 
 
