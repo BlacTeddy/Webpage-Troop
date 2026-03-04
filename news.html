@@ -10,10 +10,20 @@
 <body   class="bg-slate-50 text-slate-900 bg-red-100">
     <div data-component="nav"></div>
 <!-- SECTION  MAIN    -->
-    <main class="max-w-4xl mx-auto px-4 py-12"> 
+    <main class="max-w-4xl min-h-[75rem] mx-auto px-4  py-12"> 
         <h1 class="text-4xl font-bold mb-8 text-center">Troop Spotlight</h1> 
-        <p class="text-center -mt-3">Stay updated with the Scouts</p>
-        <div id="posts-container" class="space-y-8"> 
+        <p class="text-center text-lg  -mt-3">Stay updated with the Scouts</h3>
+        <hr class="mb-5">
+        
+        <div class="py-2 px-2 -space-x-1 ">
+            <button class="filter-btn bg-gray-400/30 text-zinc font-normal px-3  shadow-lg hover:text-red-400 transition-colors duration-200 text-center"  onclick="filterByCategory('All')">All</button>
+            <button class="filter-btn bg-gray-400/30 text-zinc font-normal px-3  shadow-lg hover:text-red-400 transition-colors duration-200 text-center"  onclick="filterByCategory('Recap')">Recap</button>
+            <button class="filter-btn bg-gray-400/30 text-zinc font-normal px-3  shadow-lg hover:text-red-400 transition-colors duration-200 text-center"  onclick="filterByCategory('Anouncment')">Anouncment</button>
+        </div>
+
+
+<!-- Posts Container -->
+        <div id="posts-container" class="space-y-8 "></div> 
             <!-- Posts will load here --> 
 
     <!-- Blog Modal -->
@@ -21,23 +31,21 @@
                 <div class="bg-white max-w-3xl w-full rounded shadow-lg overflow-y-auto max-h-[90vh] p-6 relative">
     
     <!-- Close button -->
-                    <button id="close-modal" class="absolute top-3 right-3 text-gray-600 hover:text-black text-2xl">
-                    &times;
-                    </button>
+                    <button id="close-modal" class="absolute top-3 right-3 text-gray-600 hover:text-black text-2xl"> &times; </button>
 
     <!-- Content loads here -->
-            <div id="modal-content"></div>
+                    <div id="modal-content"></div>
 
                 </div>
             </div>
-        </div> 
+         
     </main>
 
     <!-- \get rid of/ -->
-<div class="grid">
+<!-- <div class="grid">
     <a href="index.html" class="mx-auto"> home</a>
     <a href="post-template.html" class="mx-auto"> post</a>
-</div>
+</div> -->
     <!-- /get rid of\ -->
 
 <!-- SECTION FOOT -->

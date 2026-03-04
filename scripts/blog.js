@@ -1,3 +1,5 @@
+let allPosts = [];
+
 // Load JSON files (blog posts, categories, etc.)
 function loadJSON(url, callback) {
   fetch(url)
@@ -8,71 +10,135 @@ function loadJSON(url, callback) {
     .catch(err => console.error("JSON load error:", err));
 }
 
-
-
-// Initialize the blog index page
 function initBlog() {
   loadJSON("data/posts.json", posts => {
-    // Sort newest first
-    posts.sort((a, b) => new Date(b.date) - new Date(a.date));
+    allPosts = posts;
+  // sort newest to the top
+    allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    const container = document.getElementById("posts-container");
-
-    posts.forEach(post => {
-      const card = document.createElement("div");
-      card.className = "bg-white p-6 rounded shadow";
-
-      card.innerHTML = `
-        <h3 class="text-2xl font-semibold mb-2">
-          ${post.title}
-        </h3>
-
-
-        <p class="text-gray-700 mb-4 ml-5">${post.preview}..</p>
-     
-        <p class="text-sm text-gray-500 text-right -mr-5">
-        <span class="text-sm text-gray-500 ">${new Date(post.date).toLocaleDateString()}</span>
-        <span class="text-sm text-gray-500 ">• ${post.category}</span>
-        <span class="text-sm text-gray-500 ">• ${post.author}</span>
-
-        </p>
-        <button onclick="openBlogPost('${post.url}')" 
-            class="text-blue-600 font-semibold text-left hover:underline">
-          Read more→
-        </button> 
-      `;
-
-      container.appendChild(card);
-    });
+    renderPosts(allPosts);
   });
-
-
 }
 
+// ################################################ CARDS
+function renderPosts(list) {
+  const container = document.getElementById("posts-container");
+  container.innerHTML = "";
 
-function openBlogPost(url) {
+  list.forEach(post => {
+    const card = document.createElement("div");
+
+    // Tailwind styling
+    card.className = `
+      group
+      bg-white p-6 rounded-xl shadow-md border border-gray-200 
+      hover:shadow-lg hover:-translate-y-1 hover:bg-gray-200 
+      transition duration-200 space-y-3 cursor-pointer 
+    `;
+
+    // Assign ID for hybrid/template loading
+    card.dataset.id = post.id;
+
+    // Make card clickable
+    card.onclick = () => openBlogPost(post.id);
+
+    card.innerHTML = `
+      <h3 class="text-2xl font-semibold mb-2 text-blue-600 group-hover:text-red-500">${post.title}</h3>
+
+      <p class="text-gray-700 mb-4 ml-5">${post.preview} [click for more...]</p>
+
+      <p class="text-sm text-gray-500 text-right -mr-5">
+        <span class="text-sm text-gray-500">${new Date(post.date).toLocaleDateString()}</span>
+        <span class="text-sm text-gray-500">• ${post.category}</span>
+        <span class="text-sm text-gray-500">• ${post.author}</span>
+      </p>
+    `;
+
+    container.appendChild(card);
+  });
+}
+// ################################################
+
+function filterByCategory(category) {
+  document.querySelectorAll(".filter-btn").forEach(btn => {
+    btn.classList.remove("filter-active");
+  });
+
+  const activeBtn = document.querySelector(`[onclick="filterByCategory('${category}')"]`);
+  if (activeBtn) activeBtn.classList.add("filter-active");
+
+  if (category === "All") {
+    renderPosts(allPosts);
+    return;
+  }
+
+  const filtered = allPosts.filter(post =>
+    post.category.toLowerCase().includes(category.toLowerCase())
+  );
+
+  renderPosts(filtered);
+}
+
+// ################################################ BLOG POST
+// Hybrid/template loader
+function openBlogPost(id) {
+  const post = allPosts.find(p => p.id == id);
+  if (!post) return;
+
   const modal = document.getElementById("blog-modal");
   const content = document.getElementById("modal-content");
 
-  // Clear old content
-  content.innerHTML = "<p class='text-gray-500'>Loading...</p>";
-
-  // Show modal
   modal.classList.remove("hidden");
   modal.classList.add("flex");
 
-  // Load the HTML file
-  fetch(url)
-    .then(res => res.text())
-    .then(html => {
-      content.innerHTML = html;
-    })
-    .catch(err => {
-      content.innerHTML = "<p class='text-red-600'>Failed to load post.</p>";
-      console.error(err);
-    });
+  content.innerHTML = "<p class='text-gray-500'>Loading...</p>";
+
+  if (post.useTemplate) {
+    fetch(post.url)
+      .then(res => res.text())
+      .then(html => {
+        // Load template into modal
+        content.innerHTML = html;
+
+        // Inject JSON data into template
+        document.getElementById("post-title").textContent = post.title;
+
+        document.getElementById("post-meta").textContent =
+          `${new Date(post.date).toLocaleDateString()} • ${post.category} • ${post.author}`;
+
+        document.getElementById("post-body").innerHTML = post.body || "";
+
+        // HERO IMAGE
+        const hero = document.getElementById("post-hero");
+        if (hero && post.hero) {
+          hero.src = post.hero;
+          hero.classList.remove("hidden");
+        }
+
+        // GALLERY
+        const gallery = document.getElementById("post-gallery");
+        if (gallery) {
+          gallery.innerHTML = "";
+          if (post.gallery && post.gallery.length > 0) {
+            post.gallery.forEach(img => {
+              gallery.innerHTML += `
+                <img src="${img}" class="w-full h-40 object-cover rounded-md">
+              `;
+            });
+          }
+        }
+      });
+
+  } else {
+    // Load custom HTML file directly
+    fetch(post.url)
+      .then(res => res.text())
+      .then(html => content.innerHTML = html);
+  }
 }
 
+
+// ################################################
 // Close modal
 document.addEventListener("DOMContentLoaded", () => {
   const modal = document.getElementById("blog-modal");
@@ -89,4 +155,10 @@ document.addEventListener("DOMContentLoaded", () => {
       modal.classList.remove("flex");
     }
   });
+});
+
+// Highlight "All" on load
+document.addEventListener("DOMContentLoaded", () => {
+  const allBtn = document.querySelector(`[onclick="filterByCategory('All')"]`);
+  if (allBtn) allBtn.classList.add("filter-active");
 });

@@ -1,27 +1,45 @@
 [
   {
+    "id":"3",
     "title": "March Shootout upcoming",
-    "date": "2025-03-2",
+    "date": "2026-03-2",
     "category": "Anouncment",
     "author": "Mr. Dee, Scoutmaster Assistant",
     "preview": "Get ready for some fun with.",
-    "url": "blog/2026/post-template.html"
+    "body":"<p>this is a text...</p>",
+    "images":"",
+    "url": "blog/2026/post-template.html",
+    "useTemplate":true
   },
   {
+    "id": "2",
     "title": "February Campout Outing",
-    "date": "2025-02-12",
+    "date": "2026-02-12",
     "category": "Event Recap",
     "author": "Mr. Smith, Scoutmaster",
-    "preview": "loading a new post, that can be about anything. as we continue the ne.",
-    "url": "blog/2026/post-template.html"
+    "preview": "click to load the more.",
+    "thumbnail": "images/feb-thumb.jpg",
+    "hero": "images/feb-hero.jpg",
+    "gallery": [
+      "images/feb1.jpg",
+      "images/feb2.jpg",
+      "images/feb3.jpg"
+    ],
+    "body": "<p>This is a sample article text...?<br>Sed dapibus est id ligula porta, vitae ullamcorper nisi lobortis. Vivamus imperdiet velit nec metus convallis, non blandit nulla aliquam. Morbi in diam id elit fringilla tempus blandit vel tellus. Quisque tincidunt, nisi in pellentesque euismod, massa neque tincidunt risus, ut feugiat tortor enim nec nisl. Cras nibh elit, laoreet iaculis elit id, scelerisque bibendum tellus. Nullam mi mauris, volutpat et dolor ac, laoreet facilisis erat. Suspendisse tellus nibh, laoreet vitae pulvinar eu, tristique pharetra est. Nullam consequat aliquam nisl, id tincidunt erat pharetra eget. Ut at ligula sit amet leo sollicitudin sodales eu in velit. Phasellus condimentum tincidunt dolor, a maximus erat condimentum ac. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos. In sit amet lectus nec urna placerat hendrerit. Cras sit amet enim mi. Nulla rutrum velit dolor, ut aliquam velit venenatis at. In hac habitasse platea dictumst.</p>",
+    "url": "blog/2026/post-template.html",
+    "useTemplate": true
   },
   {
+    "id":"1",
     "title": "January Campout Recap!",
-    "date": "2025-01-14",
+    "date": "2026-01-14",
     "category": "Event Recap",
     "author": "Mr. Smith, Scoutmaster",
     "preview": "We kicked off the new year with a chilly but fun weekend at Alpine Scout Camp. Scouts practiced fire‑building, cooked meals, and worked together through cold weather challenges.",
-    "url": "blog/2026/post-template.html"
+    "body":"<p>.Lorem ipsum dolor sit amet, <br>consectetur adipiscing elit. Vestibulum eu risus eget dolor rhoncus congue. Donec auctor blandit faucibus. Aenean eros lectus, varius eget faucibus vel, varius vitae eros. Mauris nec consectetur enim. Donec nulla nibh, lacinia quis pretium id, convallis sit amet orci. Donec finibus nibh et facilisis dictum. Nam ut diam augue. Pellentesque venenatis sem quis cursus interdum. Pellentesque viverra eget augue sed sollicitudin. Cras vulputate eget quam et lobortis. Curabitur auctor odio et odio hendrerit porta. Mauris vel iaculis odio. Mauris ac eleifend enim. Proin posuere nunc ac ante feugiat volutpat.Duis imperdiet cursus auctor. Aenean laoreet mollis massa molestie efficitur. Nullam libero nisl, molestie id risus a, pellentesque mattis erat. Donec rutrum mauris sed quam elementum, at maximus sem interdum. Suspendisse quis tortor augue. Curabitur iaculis, nisl consequat pulvinar cursus, mauris eros posuere leo, sed consectetur dui odio pulvinar ante. Aliquam erat volutpat. Quisque ligula sem, pharetra eu metus sed, iaculis sagittis enim. Curabitur eu facilisis augue. Nunc cursus urna ac lectus posuere, non lobortis nulla viverra. Nullam mi purus, efficitur a blandit sit amet, feugiat ornare turpis. Nam volutpat porta nunc, eu commodo felis finibus vel. Sed eget commodo purus. Aenean aliquet sodales nibh, semper malesuada metus suscipit eu. Proin purus odio, pharetra vitae congue eu, condimentum eu purus. Ut eleifend mauris cursus massa tincidunt, sit amet convallis orci mollis.Quisque quis aliquam elit. Vivamus ut vehicula odio. Proin nisl libero, accumsan sed dignissim sit amet, fringilla sed justo. Integer semper feugiat massa gravida tempus. Duis aliquet nisi a rutrum vestibulum. Ut ultrices ultricies lectus, id lobortis nibh varius sed. Quisque non sem non nunc mattis volutpat vel id velit..</p>",
+    "images":"",
+    "url": "blog/2026/post-template.html",
+    "useTemplate":true
   }
 ]
 
