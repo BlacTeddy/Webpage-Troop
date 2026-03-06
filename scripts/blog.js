@@ -1,4 +1,8 @@
 let allPosts = [];
+let currentList = [];
+let visiblePosts = 3;
+const LOAD_INCREMENT = 5;
+
 
 // Load JSON files (blog posts, categories, etc.)
 function loadJSON(url, callback) {
@@ -8,15 +12,28 @@ function loadJSON(url, callback) {
       if (typeof callback === "function") callback(data);
     })
     .catch(err => console.error("JSON load error:", err));
+    
 }
 
+// ################################################
 function initBlog() {
   loadJSON("data/posts.json", posts => {
     allPosts = posts;
   // sort newest to the top
     allPosts.sort((a, b) => new Date(b.date) - new Date(a.date));
 
-    renderPosts(allPosts);
+    currentList = allPosts; 
+    // visiblePosts = 8; 
+    renderPosts(currentList.slice(0, visiblePosts));
+    updateLoadMoreButton();
+    
+   // Auto-open the modal if the page loads with ID
+    const params = new URLSearchParams(window.location.search);
+    const postId = params.get("post");
+    
+    if (postId) {
+      openBlogPost(postId);
+    }
   });
 }
 
@@ -40,7 +57,10 @@ function renderPosts(list) {
     card.dataset.id = post.id;
 
     // Make card clickable
-    card.onclick = () => openBlogPost(post.id);
+    card.onclick = () => {
+      history.pushState({}, "", `?post=${post.id}`);
+      openBlogPost(post.id);
+    };
 
     card.innerHTML = `
       <h3 class="text-2xl font-semibold mb-2 text-blue-600 group-hover:text-red-500">${post.title}</h3>
@@ -54,11 +74,13 @@ function renderPosts(list) {
       </p>
     `;
 
+
+
     container.appendChild(card);
   });
 }
-// ################################################
-
+// ################################################ 
+// Filter 
 function filterByCategory(category) {
   document.querySelectorAll(".filter-btn").forEach(btn => {
     btn.classList.remove("filter-active");
@@ -67,19 +89,21 @@ function filterByCategory(category) {
   const activeBtn = document.querySelector(`[onclick="filterByCategory('${category}')"]`);
   if (activeBtn) activeBtn.classList.add("filter-active");
 
-  if (category === "All") {
-    renderPosts(allPosts);
-    return;
-  }
-
-  const filtered = allPosts.filter(post =>
-    post.category.toLowerCase().includes(category.toLowerCase())
-  );
-
-  renderPosts(filtered);
+  if (category === "All") { 
+    currentList = allPosts; 
+  }else { 
+      currentList = allPosts.filter(post => 
+        post.category.toLowerCase().includes(category.toLowerCase()) 
+      ); 
+    } 
+    
+    renderPosts(currentList.slice(0, visiblePosts)); 
+  updateLoadMoreButton();
 }
 
 // ################################################ BLOG POST
+
+
 // Hybrid/template loader
 function openBlogPost(id) {
   const post = allPosts.find(p => p.id == id);
@@ -92,6 +116,8 @@ function openBlogPost(id) {
   modal.classList.add("flex");
 
   content.innerHTML = "<p class='text-gray-500'>Loading...</p>";
+
+
 
   if (post.useTemplate) {
     fetch(post.url)
@@ -127,6 +153,17 @@ function openBlogPost(id) {
             });
           }
         }
+        
+        // Wire the Share button to copy the URL
+        const shareBtn = document.getElementById("share-post");
+        if (shareBtn) {
+          shareBtn.onclick = () => {
+            const url = `${window.location.origin}${window.location.pathname}?post=${post.id}`;
+            navigator.clipboard.writeText(url);
+            alert("Link copied!");
+          };
+        }
+
       });
 
   } else {
@@ -134,6 +171,37 @@ function openBlogPost(id) {
     fetch(post.url)
       .then(res => res.text())
       .then(html => content.innerHTML = html);
+  }
+}
+
+// Handle browser back/forward navigation
+window.onpopstate = () => {
+  const params = new URLSearchParams(window.location.search);
+  const postId = params.get("post");
+
+  if (postId) {
+    openBlogPost(postId);
+  } else {
+    const modal = document.getElementById("blog-modal");
+    modal.classList.add("hidden");
+    modal.classList.remove("flex");
+  }
+};
+
+
+document.getElementById("load-more-btn").onclick = () => {
+  visiblePosts += LOAD_INCREMENT;
+
+  renderPosts(currentList.slice(0, visiblePosts));
+  updateLoadMoreButton();
+};
+function updateLoadMoreButton() {
+  const btn = document.getElementById("load-more-btn");
+
+  if (visiblePosts >= currentList.length) {
+    btn.classList.add("hidden");
+  } else {
+    btn.classList.remove("hidden");
   }
 }
 
@@ -156,7 +224,7 @@ document.addEventListener("DOMContentLoaded", () => {
     }
   });
 });
-
+// ################################################
 // Highlight "All" on load
 document.addEventListener("DOMContentLoaded", () => {
   const allBtn = document.querySelector(`[onclick="filterByCategory('All')"]`);
