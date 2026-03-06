@@ -4,11 +4,11 @@ nav { position: static !important; }
 a { text-decoration: none !important; } */
 
  
- *{
- /* caret-color: transparent;  */
- /* background-color: aqua;  */
-/* outline: 1px solid red; */
-}
+ /* *{
+ caret-color: transparent; 
+ background-color: aqua; 
+outline: 1px solid red;
+} */
  
 
 /* apply to everything except inputs, textareas, and contenteditable elements \*/
